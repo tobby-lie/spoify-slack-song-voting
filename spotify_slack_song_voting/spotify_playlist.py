@@ -3,18 +3,25 @@ Module to generate and return playlist tracks from a specified Spotify username 
 playlist name
 """
 import logging
-from pathlib import Path
+
+# from pathlib import Path
 from typing import List, Optional
 
 import spotipy
-from dotenv import load_dotenv
+
+# from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyClientCredentials
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-env_path = Path(".") / ".env"
-load_dotenv(dotenv_path=env_path)
+# env_path = Path(".") / ".env"
+# load_dotenv(dotenv_path=env_path)
+
+SPOTIPY_CLIENT_ID: str = "d54f5cb052d0435ca4bac61385aa8805"
+SPOTIPY_CLIENT_SECRET: str = "8c3c954f6ace4d5bab3944fbd673cc1c"
+SLACK_TOKEN: str = "xoxb-4849396745840-4822786434229-UiarvtSy4Ug4KuPIMmrw3nIb"
+SIGNING_SECRET: str = "74632507c18cf19616123961e7ff920a"
 
 
 class SpotifyPlaylist:

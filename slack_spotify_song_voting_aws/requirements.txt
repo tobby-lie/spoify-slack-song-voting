@@ -1,0 +1,5 @@
+num2words==0.5.12
+slack-bolt==1.17.1
+slackclient==2.9.4
+slackeventsapi==2.1.0
+spotipy==2.22.1
