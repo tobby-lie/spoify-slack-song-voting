@@ -1,8 +1,11 @@
 import logging
 
+import boto3
 import slack
 from slack_bolt import App
 from slack_bolt.adapter.aws_lambda import SlackRequestHandler
+
+num2words
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -10,10 +13,12 @@ logger = logging.getLogger(__name__)
 # process_before_response must be True when running on FaaS
 app = App(
     process_before_response=True,
-    token="xoxb-4849396745840-4822786434229-UiarvtSy4Ug4KuPIMmrw3nIb",
+    token="xoxb-4849396745840-4822786434229-lthUikdOoaKnxeFz5YQk0rMh",
     signing_secret="74632507c18cf19616123961e7ff920a"
 )
 
+dynamodb = boto3.client("dynamodb")
+# table = dynamodb.Table("spotify-slack-bot-table-poc")
 
 # # listener matcher to check if the reaction should be handled
 # def target_reactions_only(event) -> bool:
@@ -70,6 +75,30 @@ def respond_to_slack_within_3_seconds(ack, respond, context, command):
 @app.event("reaction_added")
 def handle_reaction_added_events(client, event, context, body, logger, message):
     logger.info(event)
+    dynamodb.update_item(
+        TableName="spotify-slack-bot-table-poc",
+        Key={
+            # "message_id": {"N": event["item"]["ts"]},
+            "message_id": {"N": "1681448152.423259"},
+
+        },
+        UpdateExpression=(
+            "SET #1_count = :1_count_val, #2_count = :2_count_val, #3_count = :3_count_val, #channel_id = :channel_id"
+        ),
+        ExpressionAttributeNames={
+            "#1_count": "1_count",
+            "#2_count": "2_count",
+            "#3_count": "3_count",
+            "#channel_id": "channel_id"
+        },
+        ExpressionAttributeValues={
+            ":1_count_val": {"N": "1"},
+            ":2_count_val": {"N": "0"},
+            ":3_count_val": {"N": "0"},
+            ":channel_id": {"S": event["item"]["channel"]}
+        }
+
+    )
     client.chat_postMessage(channel=context.channel_id, text=f"{event}")
 
 
