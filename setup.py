@@ -17,6 +17,7 @@ setup(
         "slackers",
         "slackeventsapi",
         "spotipy",
+        "word2number"
     ],
     license="MIT License",
 )
