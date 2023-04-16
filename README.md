@@ -54,7 +54,7 @@
 ### AWS Resources utilized + purposes
 
 1. AWS Lambdas
-   1. `spotify-slack-bot-lambda-poc` is responsible for handling incoming requests from the Slack API such as events and slash commands.
+   1. `spotify-slack-bot-lambda-poc` is responsible for handling incoming requests from the Slack API such as events and slash commands. This Lambda is exposed as a function url so that it can accept incoming Slack requests.
    2. `spotify-slack-bot-put-survey-songs-lambda-poc` when a poll is initiated, the song titles for the vote are sent to an SQS queue so that they can be stored in the dynamodb table. This is decoupled as slash commands must complete in 3 seconds or less, or else a timeout error is returned. Writing to SQS takes less time than writing to DynamoDB which does take longer than 3 seconds. This Lambda is triggered by an SQS (will be described below).
 2. SQS
    1. `spotify-slack-bot-sqs-poc` as mentioned, SQS is required so the process of storing song poll song titles is decoupled from request handling.
@@ -86,6 +86,10 @@ Here are the steps to upload Docker images to the two Lambdas (Make sure you are
    2. Run `docker tag spotify-slack-bot-put-survey-songs-image-poc:latest 720068558948.dkr.ecr.us-west-2.amazonaws.com/spotify-slack-bot-put-survey-songs-image-poc:latest`
    3. Run `docker push 720068558948.dkr.ecr.us-west-2.amazonaws.com/spotify-slack-bot-put-survey-songs-image-poc:latest`
    4. Once pushed successfully, change the Docker image for the Lambda to point at the new `latest`
+
+### Slack API integration
+
+Make sure slash command and event subscription request urls are both pointed at the `spotify-slack-bot-lambda-poc` function url.
 
 ### Future Work
 
